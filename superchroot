@@ -5,7 +5,7 @@
 # author    : Erlkonig
 #             https://github.com/Erlkonig-codes
 # project   : https://github.com/Erlkonig-codes/Superchroot
-# license   : GNU
+# license   : GNU General Public License v3.0
 
 set -e
 
