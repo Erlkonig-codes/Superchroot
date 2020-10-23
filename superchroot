@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Superchroot
+# --------------------------------
+# author    : Erlkonig
+#             https://github.com/Erlkonig-codes
+# project   : https://github.com/Erlkonig-codes/Superchroot
+# license   : GNU
+
 set -e
 
 call=$1
