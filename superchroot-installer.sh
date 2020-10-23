@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Superchroot Installer
+# --------------------------------
+# author    : Erlkonig
+#             https://github.com/Erlkonig-codes
+# project   : https://github.com/Erlkonig-codes/Superchroot
+# license   : GNU General Public License v3.0
+
 set -e
 
 echo -e "----------------------------------------------"
