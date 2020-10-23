@@ -1,0 +1,128 @@
+#!/bin/bash
+
+set -e
+
+call=$1
+drive=$2
+
+
+helparg () {
+    echo -e "\e[32m Superchroot\e[0m is an automated \e[33m chroot\e[0m-ing utility for existing Linux based operating systems."
+    echo -e "  "
+    echo -e "Arguments:"
+    echo -e "  -h = shows the help dialog"
+    echo -e "  -m = proceeds to the superchroot-ing process"
+    echo -e "  -u = umounts everything superchroot mounted"
+    echo -e "   "
+    echo -e "  --help = see -h"
+    echo -e "   "
+    echo -e "\e[32m Superchroot\e[0m was created by \e[36mErlkonig\e[0m as he wants to chroot faster and with networking."
+    echo -e "\e[32m Superchroot\e[0m was inspired by arch-chroot from Arch."
+    echo -e "   "
+    }
+
+chrootarg () {
+    if [ -z "$drive" ]
+        then
+        
+            echo -e "These are the\e[32m Superchroot\e[0m-able partitions"
+            lsblk
+            echo "  "
+            echo -e "Which partition do you want to \e[32m Superchroot\e[0m into?"
+            echo -e "e.g. = sda1"
+            read part
+            
+            if grep -q $part /proc/partitions;
+                then
+                    echo -e "  "
+                    echo -e "  "
+                    echo -e "  "
+                    echo -e "Partition \e[34m$part\e[0m is going to be mounted!"
+                    echo -e "   "
+                    sudo mount /dev/$part /mnt
+                    echo -e "   "
+                    sudo mount --bind /dev /mnt/dev
+                    echo -e "\e[96m /dev\e[0m is mounted."
+                    sudo mount --bind /proc /mnt/proc
+                    echo -e "\e[96m /proc\e[0m is mounted."
+                    sudo mount --bind /sys /mnt/sys
+                    echo -e "\e[96m /sys\e[0m is mounted."
+                    echo -e "   "
+                    echo -e "\e[35mNetworking\e[0m is being established"
+                    sudo rm -rf /mnt/etc/resolv.conf
+                    sudo cp -L /etc/resolv.conf /mnt/etc/
+                    echo -e "\e[35mNetworking\e[0m is established"
+                    echo -e "   "
+                    echo -e "\e[32mSuperchrooting...\e[0m"
+                    sudo chroot /mnt
+                    
+            else
+                    echo -e ""
+                    echo -e "Mountpoint does not exist!"
+                    echo -e "\e[32mSuperchroot\e[0m is aborting."
+                    echo -e "exiting"
+                    echo -e ""
+            fi      
+            
+    elif grep -q $drive /proc/partitions;
+        then
+            echo -e "Partition \e[34m$drive\e[0m is going to be mounted!"
+            echo -e "   "
+            sudo mount /dev/$drive /mnt
+            echo -e "   "
+            sudo mount --bind /dev /mnt/dev
+            echo -e "\e[96m /dev\e[0m is mounted."
+            sudo mount --bind /proc /mnt/proc
+            echo -e "\e[96m /proc\e[0m is mounted."
+            sudo mount --bind /sys /mnt/sys
+            echo -e "\e[96m /sys\e[0m is mounted."
+            echo -e "   "
+            echo -e "\e[35mNetworking\e[0m is being established"
+            sudo rm -rf /mnt/etc/resolv.conf
+            sudo cp -L /etc/resolv.conf /mnt/etc/
+            echo -e "\e[35mNetworking\e[0m is established"
+            echo -e "   "
+            echo -e "\e[32mSuperchrooting...\e[0m"
+            sudo chroot /mnt
+    else
+            echo -e ""
+            echo -e "Mountpoint does not exist!"
+            echo -e "\e[32mSuperchroot\e[0m is aborting."
+            echo -e "exiting"
+            echo -e ""
+    fi      
+
+}
+
+uchrootarg () {
+    echo -e "Unmounting everything you used in \e[32msuperchroot\e[0m."
+    echo "  "
+    sudo umount /mnt/dev
+    echo -e "Unmounted\e[96m /dev\e[0m"
+    sudo umount /mnt/proc
+    echo -e "Unmounted\e[96m /proc\e[0m"
+    sudo umount /mnt/sys
+    echo -e "Unmounted\e[96m /sys\e[0m"
+    sudo umount /mnt
+    echo -e "Unmounted\e[34m /mnt \e[0m"
+    echo "  "
+    echo -e "Done unmounting!"
+    echo -e "Support \e[36mErlkonig\e[0m by Donating!"
+    echo -e "   "
+    }
+case $call in
+    -h | --help)
+        helparg
+        ;;
+    -m)
+        chrootarg
+        ;;
+    -u)
+        uchrootarg
+        ;;
+    *)
+        echo "Argument is wrong or null!"
+        echo "Superchroot is aborting."
+        echo "exiting"
+        ;;
+esac
